@@ -46,8 +46,12 @@ export class BugsController extends BaseController {
 
   async put(req, res, next) {
     try {
-      const data = await bugsService.put(req.params.id, req.body)
-      res.send(data)
+      const data = req.body
+      // data.bugId = req.params.id
+      data.creator = req.userInfo
+      data.creatorId = req.userInfo.id
+      const val = await bugsService.put(req.params.id, data)
+      res.send(val)
     } catch (error) {
       next(error)
     }
@@ -68,7 +72,11 @@ export class BugsController extends BaseController {
 
   async delete(req, res, next) {
     try {
-      await bugsService.delete(req.params.id)
+      const data = req.body
+      data.bugId = req.params.id
+      data.creator = req.userInfo
+      data.creatorId = req.userInfo.id
+      await bugsService.delete(data)
       res.send('YOU ARE REJECTED..GO TO BIN')
     } catch (error) {
       next(error)

@@ -29,6 +29,8 @@ export default {
       state,
       async deleteNotes() {
         try {
+          // eslint-disable-next-line no-undef
+          swal('Deleted', 'congratulation on deleting a note', 'success')
           await noteService.deleteNotes(props.noteProp.id)
         } catch (error) {
           logger.error(error)

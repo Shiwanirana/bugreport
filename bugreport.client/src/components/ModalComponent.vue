@@ -60,11 +60,11 @@
               <button type="button" class="btn btn-secondary" data-dismiss="modal">
                 Close
               </button>
-              <!-- <router-link :to="{path: '/active/'+ state.new._id}"> -->
+              <!-- <router-push :to="{path: '/active/'+ state.new._id}"> -->
               <button type="submit" class="btn btn-success">
                 Submit
               </button>
-              <!-- </router-link> -->
+              <!-- </router-push> -->
             </div>
           </form>
         </div>
@@ -77,6 +77,10 @@ import { computed, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { bugService } from '../services/BugService'
 import { logger } from '../utils/Logger'
+// eslint-disable-next-line no-unused-vars
+import router from '../router'
+import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 export default {
   name: 'ModalComponent',
   component: 'BugComponent',
@@ -91,16 +95,21 @@ export default {
     // }
   },
   setup() {
+    const router = useRouter()
     const state = reactive({
       new: {},
       user: computed(() => AppState.user),
-      active: computed(() => AppState.activeBug)
+      active: computed(() => AppState.activeBug),
+      bugs: computed(() => AppState.bugs)
     })
     return {
       state,
       async create() {
         try {
-          await bugService.create(state.new)
+          const id = await bugService.create(state.new)
+          state.new = {}
+          router.push({ name: 'Active', params: { id } })
+          // add router push
         } catch (error) {
           logger.error(error)
         }
