@@ -14,7 +14,8 @@ class BugService {
   async create(data) {
     const res = await api.post('api/bugs', data)
     AppState.bugs.push(res.data)
-    logger.log(res.data)
+    return res.data.id
+    // logger.log(res.data)
   }
 
   async getOne(id) {

@@ -10,8 +10,9 @@ class NoteService {
 
   async createNote(data) {
     logger.log(data)
-    AppState.notes.push(data)
     const res = await api.post('api/notes', data)
+    AppState.notes.push(res.data)
+    // AppState.notes = res.data
     logger.log(res.data)
   }
 
